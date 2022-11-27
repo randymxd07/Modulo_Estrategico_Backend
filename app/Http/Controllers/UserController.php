@@ -23,7 +23,10 @@ class UserController extends Controller
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
         $user = auth()->user();
-        return response()->json(compact(['user', 'token']));
+        return response()->json([
+            "token" => $token,
+            "user" => $user
+        ]);
     }
 
     public function getAuthenticatedUser()
@@ -39,7 +42,10 @@ class UserController extends Controller
         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
             return response()->json(['token_absent'], $e->getStatusCode());
         }
-        return response()->json(compact('user'));
+
+        return response()->json([
+            'user' => $user
+        ]);
     }
 
 
