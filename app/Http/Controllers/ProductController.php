@@ -48,11 +48,14 @@ class ProductController extends Controller
 
             $url = "";
             $image = $request->image_url;
-            $image = str_replace('data:image/png;base64,', '', $image);
-            $image = str_replace(' ', '+', $image);
-            $imageName = Str::uuid().'.'.'png';
-            \File::put(public_path(). '/public/images/' . $imageName, base64_decode($image));
-            $url = URL::to('/') . '/public/images/' . $imageName;
+
+            if($image){
+                $image = str_replace('data:image/png;base64,', '', $image);
+                $image = str_replace(' ', '+', $image);
+                $imageName = Str::uuid().'.'.'png';
+                \File::put(public_path(). '/public/productImages/' . $imageName, base64_decode($image));
+                $url = URL::to('/') . '/public/productImages/' . $imageName;
+            }
 
             $data = [
                 "name" => $request['name'],
