@@ -9,18 +9,9 @@ use App\Models\ProductCategory;
 
 class ProductFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
+
     protected $model = Product::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
     public function definition()
     {
         return [
@@ -34,4 +25,5 @@ class ProductFactory extends Factory
             'status' => $this->faker->boolean,
         ];
     }
+
 }

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -45,10 +46,13 @@ class ProductController extends Controller
 
             DB::beginTransaction();
 
-            $file = $request->file('image_url');
-            $filename = uniqid() . "_" . $file->getClientOriginalName();
-            $file->move(public_path('public/images'), $filename);
-            $url = URL::to('/') . '/public/images/' . $filename;
+            $url = "";
+            $image = $request->image_url;
+            $image = str_replace('data:image/png;base64,', '', $image);
+            $image = str_replace(' ', '+', $image);
+            $imageName = Str::uuid().'.'.'png';
+            \File::put(public_path(). '/public/images/' . $imageName, base64_decode($image));
+            $url = URL::to('/') . '/public/images/' . $imageName;
 
             $data = [
                 "name" => $request['name'],
@@ -112,6 +116,7 @@ class ProductController extends Controller
 
     }
 
+//    TODO: ARREGLAR LO DE ACTUALIZAR LOS PRODUCTOS //
     public function update($id, ProductUpdateRequest $request)
     {
 

@@ -1,32 +1,5 @@
 models:
-  ProductCategory:
-    id: id
-    name: string:40
-    description: text nullable
-    status: boolean default:true
-    timestamps
-    softDeletes
-    relationships:
-      belongsTo: Product
-
-  Product:
-    id: id
-    name: string:100
-    description: text nullable
-    product_category_id: id foreign:product_categories.id
-    price: decimal:8,2
-    image_url: string nullable
-    estimated_time: time
-    score: integer
-    status: boolean default:true
-    timestamps
-    softDeletes
-    relationships:
-      belongsTo: OrderProduct, Recipe, MenusVsProduct
-      hasMany: ProductCategory
 
 controllers:
-  ProductCategory:
-    resource
-  Product:
-    resource
+
+seeders:

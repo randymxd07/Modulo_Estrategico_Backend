@@ -8,18 +8,10 @@ use App\Models\ProductCategory;
 
 class ProductCategoryFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
+
     protected $model = ProductCategory::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
+
     public function definition()
     {
         return [
@@ -28,4 +20,5 @@ class ProductCategoryFactory extends Factory
             'status' => $this->faker->boolean,
         ];
     }
+
 }
