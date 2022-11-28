@@ -11,11 +11,14 @@ use Illuminate\Support\Facades\DB;
 class ProductCategoryController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         try {
 
             $productCategories = ProductCategory::all();
+
+            if($request->query('number') != 0)
+                $productCategories = ProductCategory::all()->take($request->query('number'));
 
             if($productCategories->count() == 0)
                 return response()->json([
