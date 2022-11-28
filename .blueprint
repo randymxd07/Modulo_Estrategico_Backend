@@ -1,2 +1,29 @@
+created:
+    - app/Http/Controllers/ProductCategoryController.php
+    - app/Http/Controllers/ProductController.php
+    - database/factories/ProductCategoryFactory.php
+    - database/factories/ProductFactory.php
+    - database/migrations/2022_11_27_213221_create_product_categories_table.php
+    - database/migrations/2022_11_27_213222_create_products_table.php
+    - app/Models/ProductCategory.php
+    - app/Models/Product.php
+    - tests/Feature/Http/Controllers/ProductCategoryControllerTest.php
+    - tests/Feature/Http/Controllers/ProductControllerTest.php
+    - app/Http/Requests/ProductCategoryStoreRequest.php
+    - app/Http/Requests/ProductCategoryUpdateRequest.php
+    - app/Http/Requests/ProductStoreRequest.php
+    - app/Http/Requests/ProductUpdateRequest.php
+    - resources/views/productCategory/index.blade.php
+    - resources/views/productCategory/create.blade.php
+    - resources/views/productCategory/show.blade.php
+    - resources/views/productCategory/edit.blade.php
+    - resources/views/product/index.blade.php
+    - resources/views/product/create.blade.php
+    - resources/views/product/show.blade.php
+    - resources/views/product/edit.blade.php
+updated:
+    - routes/api.php
 models:
-    User: {  }
+    User: { fullname: string, email: 'string:100', password: string, remember_token: 'string:100 nullable' }
+    ProductCategory: { id: id, name: 'string:40', description: text, status: 'boolean default:true', timestamps: timestamps, softdeletes: softDeletes, relationships: { belongsTo: Product } }
+    Product: { id: id, name: 'string:100', description: text, product_category_id: 'id foreign:product_categories.id', price: 'decimal:8,2', image_url: 'string nullable', estimated_time: time, score: integer, status: 'boolean default:true', timestamps: timestamps, softdeletes: softDeletes, relationships: { belongsTo: 'OrderProduct, Recipe, MenusVsProduct', hasMany: ProductCategory } }
