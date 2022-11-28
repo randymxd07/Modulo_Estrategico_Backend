@@ -127,11 +127,23 @@ class ProductController extends Controller
 
             DB::beginTransaction();
 
+            $url = "";
+            $image = $request->image_url;
+
+            if($image){
+                $image = str_replace('data:image/png;base64,', '', $image);
+                $image = str_replace(' ', '+', $image);
+                $imageName = Str::uuid().'.'.'png';
+                \File::put(public_path(). '/public/productImages/' . $imageName, base64_decode($image));
+                $url = URL::to('/') . '/public/productImages/' . $imageName;
+            }
+
             $data = [
                 "name" => $request['name'],
                 "description" => $request['description'],
                 "product_category_id" => $request['product_category_id'],
                 "price" => $request['price'],
+                "image_url" => $url,
                 "estimated_time" => $request['estimated_time'],
                 "score" => $request['score'],
                 "status" => $request['status'],
