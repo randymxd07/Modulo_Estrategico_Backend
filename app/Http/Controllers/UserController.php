@@ -17,17 +17,20 @@ class UserController extends Controller
     {
         $credentials = $request->only('email', 'password');
         try {
-            if (! $token = JWTAuth::attempt($credentials,  ['exp' => Carbon::now()->addDays(7)->timestamp])) {
+            if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'invalid_credentials'], 400);
             }
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
+
         $user = auth()->user();
+
         return response()->json([
             "token" => $token,
             "user" => $user
         ]);
+
     }
 
     public function getAuthenticatedUser()
@@ -47,6 +50,7 @@ class UserController extends Controller
         return response()->json([
             'user' => $user
         ]);
+
     }
 
 
