@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Requests\UpdateProductScoreRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -196,6 +197,42 @@ class ProductController extends Controller
             throw new \Exception($e);
 
         }
+
+    }
+
+    public function putScore($id, UpdateProductScoreRequest $request){
+
+        try {
+
+            DB::beginTransaction();
+
+            $product = Product::where('id', '=', $id)->update([
+                "score" => $request['score']
+            ]);
+
+            if(!$product)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No se pude actualizar el score producto"
+                ], 400);
+
+            DB::commit();
+
+            $pro = Product::where('id', '=', $id)->first();
+
+            return response()->json([
+                "data" => $pro,
+                "message" => "Score del producto actualizado correctamente"
+            ], 200);
+
+        } catch(\Exception $e){
+
+            DB::rollBack();
+
+            throw new \Exception($e);
+
+        }
+
 
     }
 

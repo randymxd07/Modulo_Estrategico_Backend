@@ -17,6 +17,7 @@ Route::group([
         Route::get('/{id}', [ProductController::class, 'show']);
         Route::get('/byCategory/{id}', [ProductController::class, 'byCategory']);
         Route::put('/{id}', [ProductController::class, 'update']);
+        Route::put('/putScore/{id}', [ProductController::class, 'putScore']);
         Route::delete('/{id}', [ProductController::class, 'destroy']);
     });
 });
