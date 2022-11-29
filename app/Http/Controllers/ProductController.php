@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use MongoDB\Driver\Exception\Exception;
 
 class ProductController extends Controller
 {
@@ -18,16 +19,16 @@ class ProductController extends Controller
     {
         try {
 
-            $product = Product::all();
+            $products = Product::all();
 
-            if($product->count() == 0)
+            if($products->count() == 0)
                 return response()->json([
                     "data" => null,
                     "message" => "No hay productos en la base de datos"
                 ], 404);
 
             return response()->json([
-                "data" => $product,
+                "data" => $products,
                 "mesagge" => "Productos encontrados correctamente"
             ], 200);
 
@@ -119,7 +120,31 @@ class ProductController extends Controller
 
     }
 
-//    TODO: ARREGLAR LO DE ACTUALIZAR LOS PRODUCTOS //
+    public function byCategory($id){
+
+        try {
+
+            $products = Product::where('product_category_id', '=', $id)->get();
+
+            if($products->count() == 0)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No hay productos con esta categoria en la base de datos"
+                ], 404);
+
+            return response()->json([
+                "data" => $products,
+                "mesagge" => "Productos encontrados correctamente"
+            ], 200);
+
+        } catch (Exception $e){
+
+            throw new \Exception($e);
+
+        }
+
+    }
+
     public function update($id, ProductUpdateRequest $request)
     {
 
