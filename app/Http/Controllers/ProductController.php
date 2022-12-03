@@ -20,7 +20,7 @@ class ProductController extends Controller
     {
         try {
 
-            $products = Product::all();
+            $products = Product::inRandomOrder()->get();
 
             if($products->count() == 0)
                 return response()->json([

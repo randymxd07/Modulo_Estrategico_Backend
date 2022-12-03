@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
     Route: http://localhost:8000/api/products
 ------------------------------------------------*/
 Route::group([
-    'middleware' => 'jwt.verify',
+    'middleware' => 'api',
 ],function () {
     Route::group([
         'prefix' => 'products',
