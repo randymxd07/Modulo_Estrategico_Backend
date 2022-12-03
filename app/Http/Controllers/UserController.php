@@ -13,6 +13,7 @@ use Log;
 
 class UserController extends Controller
 {
+
     public function authenticate(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -48,7 +49,8 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'user' => $user
+            'user' => $user,
+            "token" => JWTAuth::fromUser($user)
         ]);
 
     }
