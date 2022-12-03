@@ -6,85 +6,147 @@ use App\Http\Requests\PaymentMethodStoreRequest;
 use App\Http\Requests\PaymentMethodUpdateRequest;
 use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentMethodController extends Controller
 {
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $paymentMethods = PaymentMethod::all();
 
-        return view('paymentMethod.index', compact('paymentMethods'));
+    public function index()
+    {
+
+        try {
+
+            $paymentMethods = PaymentMethod::all();
+
+            if($paymentMethods->count() == 0)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No hay metodos de pago en la base de datos"
+                ], 404);
+
+            return response()->json([
+                "data" => $paymentMethods,
+                "message" => "Metodos de pagos encontrados correctamente"
+            ], 200);
+
+        } catch (\Exception $e){
+
+            throw new \Exception($e);
+
+        }
+
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        return view('paymentMethod.create');
-    }
-
-    /**
-     * @param \App\Http\Requests\PaymentMethodStoreRequest $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(PaymentMethodStoreRequest $request)
     {
-        $paymentMethod = PaymentMethod::create($request->validated());
 
-        $request->session()->flash('paymentMethod.id', $paymentMethod->id);
+        try {
 
-        return redirect()->route('paymentMethod.index');
+            DB::beginTransaction();
+
+            $paymentMethod = PaymentMethod::create($request->validated());
+
+            if(!$paymentMethod)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No se pudo crear el metodo de pago"
+                ], 400);
+
+            DB::commit();
+
+            return response()->json([
+                "data" => $paymentMethod,
+                "message" => "Metodo de pago creado correctamente"
+            ], 201);
+
+        } catch (\Exception $e){
+
+            DB::rollBack();
+
+            throw new \Exception($e);
+
+        }
+
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\PaymentMethod $paymentMethod
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request, PaymentMethod $paymentMethod)
+    public function show($id)
     {
-        return view('paymentMethod.show', compact('paymentMethod'));
+
+        try {
+
+            $paymentMethod = PaymentMethod::findOrFail($id);
+
+            if(!$paymentMethod)
+                return response()->json([
+                    "data" => null,
+                    "message" => `El metodo de pago con el id: ${$id} no pudo ser encontrado`
+                ], 404);
+
+            return response()->json([
+                "data" => $paymentMethod,
+                "message" => "Metodo de pago encontrado correctamente"
+            ], 200);
+
+        } catch (\Exception $e){
+
+            throw new \Exception($e);
+
+        }
+
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\PaymentMethod $paymentMethod
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request, PaymentMethod $paymentMethod)
+    public function update($id, PaymentMethodUpdateRequest $request)
     {
-        return view('paymentMethod.edit', compact('paymentMethod'));
+
+        try {
+
+            DB::beginTransaction();
+
+            $paymentMethod = PaymentMethod::where('id', '=', $id)->update($request->all());
+
+            if(!$paymentMethod)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No se pude actualizar el metodo de pago"
+                ], 400);
+
+            DB::commit();
+
+            return response()->json([
+                "data" => $request->all(),
+                "message" => "Metodo de pago actualizado correctamente"
+            ], 200);
+
+        } catch (Exception $e){
+
+            DB::rollBack();
+
+            throw new \Exception($e);
+
+        }
+
     }
 
-    /**
-     * @param \App\Http\Requests\PaymentMethodUpdateRequest $request
-     * @param \App\Models\PaymentMethod $paymentMethod
-     * @return \Illuminate\Http\Response
-     */
-    public function update(PaymentMethodUpdateRequest $request, PaymentMethod $paymentMethod)
+    public function destroy($id)
     {
-        $paymentMethod->update($request->validated());
 
-        $request->session()->flash('paymentMethod.id', $paymentMethod->id);
+        try {
 
-        return redirect()->route('paymentMethod.index');
+            $paymentMethod = PaymentMethod::findOrFail($id);
+
+            $paymentMethod->delete();
+
+            return response()->json([
+                "data" => $paymentMethod,
+                "message" => 'El metodo de pago fue eliminado correctamente'
+            ], 200);
+
+        } catch (\Exception $e){
+
+            throw new \Exception($e);
+
+        }
+
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\PaymentMethod $paymentMethod
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, PaymentMethod $paymentMethod)
-    {
-        $paymentMethod->delete();
-
-        return redirect()->route('paymentMethod.index');
-    }
 }

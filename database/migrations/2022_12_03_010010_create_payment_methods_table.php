@@ -14,11 +14,11 @@ class CreatePaymentMethodsTable extends Migration
     public function up()
     {
         Schema::create('payment_methods', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('description', 100)->unique();
             $table->boolean('status')->default(true);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes()->nullable();
         });
     }
 

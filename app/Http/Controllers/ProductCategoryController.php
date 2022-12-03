@@ -28,7 +28,7 @@ class ProductCategoryController extends Controller
 
             return response()->json([
                 "data" => $productCategories,
-                "mesagge" => "Categorias de productos encontradas correctamente"
+                "message" => "Categorias de productos encontradas correctamente"
             ], 200);
 
         } catch (\Exception $e){
@@ -51,7 +51,7 @@ class ProductCategoryController extends Controller
             if(!$productCategory)
                 return response()->json([
                    "data" => null,
-                   "message" => "No se pude crear la categoria del producto"
+                   "message" => "No se pudo crear la categoria del producto"
                 ], 400);
 
             DB::commit();
@@ -86,7 +86,7 @@ class ProductCategoryController extends Controller
 
             return response()->json([
                 "data" => $productCategory,
-                "mesagge" => "Categorias de productos encontrada correctamente"
+                "message" => "Categorias de productos encontrada correctamente"
             ], 200);
 
         } catch (\Exception $e){

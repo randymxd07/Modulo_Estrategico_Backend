@@ -16,12 +16,14 @@ class CreateOrderVsProductsTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('order_vs_products', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('quantity');
-            $table->softDeletes();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('order_id');
+            $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->unsignedBigInteger('quantity');
             $table->timestamps();
+            $table->softDeletes()->nullable();
         });
 
         Schema::enableForeignKeyConstraints();

@@ -6,85 +6,147 @@ use App\Http\Requests\OrderTypeStoreRequest;
 use App\Http\Requests\OrderTypeUpdateRequest;
 use App\Models\OrderType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderTypeController extends Controller
 {
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $orderTypes = OrderType::all();
 
-        return view('orderType.index', compact('orderTypes'));
+    public function index()
+    {
+
+        try {
+
+            $orderTypes = OrderType::all();
+
+            if($orderTypes->count() == 0)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No hay tipo de ordenes en la base de datos"
+                ], 404);
+
+            return response()->json([
+                "data" => $orderTypes,
+                "message" => "Tipos de ordenes encontrados correctamente"
+            ], 200);
+
+        } catch (\Exception $e){
+
+            throw new \Exception($e);
+
+        }
+
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        return view('orderType.create');
-    }
-
-    /**
-     * @param \App\Http\Requests\OrderTypeStoreRequest $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(OrderTypeStoreRequest $request)
     {
-        $orderType = OrderType::create($request->validated());
 
-        $request->session()->flash('orderType.id', $orderType->id);
+        try {
 
-        return redirect()->route('orderType.index');
+            DB::beginTransaction();
+
+            $orderType = OrderType::create($request->validated());
+
+            if(!$orderType)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No se pudo crear el tipo de orden"
+                ], 400);
+
+            DB::commit();
+
+            return response()->json([
+                "data" => $orderType,
+                "message" => "Tipo de orden creado correctamente"
+            ], 201);
+
+        } catch (\Exception $e){
+
+            DB::rollBack();
+
+            throw new \Exception($e);
+
+        }
+
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\OrderType $orderType
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request, OrderType $orderType)
+    public function show($id)
     {
-        return view('orderType.show', compact('orderType'));
+
+        try {
+
+            $orderType = OrderType::findOrFail($id);
+
+            if(!$orderType)
+                return response()->json([
+                    "data" => null,
+                    "message" => `El tipo de orden con el id: ${$id} no pudo ser encontrado`
+                ], 404);
+
+            return response()->json([
+                "data" => $orderType,
+                "message" => "Tipo de orden encontrado correctamente"
+            ], 200);
+
+        } catch (\Exception $e){
+
+            throw new \Exception($e);
+
+        }
+
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\OrderType $orderType
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request, OrderType $orderType)
+    public function update($id, OrderTypeUpdateRequest $request)
     {
-        return view('orderType.edit', compact('orderType'));
+
+        try {
+
+            DB::beginTransaction();
+
+            $orderType = OrderType::where('id', '=', $id)->update($request->all());
+
+            if(!$orderType)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No se pude actualizar el tipo de orden"
+                ], 400);
+
+            DB::commit();
+
+            return response()->json([
+                "data" => $request->all(),
+                "message" => "Tipo de orden actualizado correctamente"
+            ], 200);
+
+        } catch (Exception $e){
+
+            DB::rollBack();
+
+            throw new \Exception($e);
+
+        }
+
     }
 
-    /**
-     * @param \App\Http\Requests\OrderTypeUpdateRequest $request
-     * @param \App\Models\OrderType $orderType
-     * @return \Illuminate\Http\Response
-     */
-    public function update(OrderTypeUpdateRequest $request, OrderType $orderType)
+    public function destroy($id)
     {
-        $orderType->update($request->validated());
 
-        $request->session()->flash('orderType.id', $orderType->id);
+        try {
 
-        return redirect()->route('orderType.index');
+            $orderType = OrderType::findOrFail($id);
+
+            $orderType->delete();
+
+            return response()->json([
+                "data" => $orderType,
+                "message" => 'El tipo de orden fue eliminado correctamente'
+            ], 200);
+
+        } catch (\Exception $e){
+
+            throw new \Exception($e);
+
+        }
+
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\OrderType $orderType
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, OrderType $orderType)
-    {
-        $orderType->delete();
-
-        return redirect()->route('orderType.index');
-    }
 }

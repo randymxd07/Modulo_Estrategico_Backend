@@ -16,15 +16,18 @@ class CreateOrdersTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('order_type_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('payment_method_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('latitude');
-            $table->integer('longitude');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->unsignedBigInteger('order_type_id');
+            $table->foreign('order_type_id')->references('id')->on('order_types')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->unsignedBigInteger('payment_method_id');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->unsignedBigInteger('latitude');
+            $table->unsignedBigInteger('longitude');
             $table->boolean('status')->default(true);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes()->nullable();
         });
 
         Schema::enableForeignKeyConstraints();
