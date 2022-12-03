@@ -26,3 +26,9 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 require __DIR__.'/../routes/resources/ProductCategoryResource.php';
 
 require __DIR__.'/../routes/resources/ProductResource.php';
+
+require __DIR__.'/../routes/resources/OrderTypeResource.php';
+
+require __DIR__.'/../routes/resources/PaymentMethodResource.php';
+
+require __DIR__.'/../routes/resources/OrderResource.php';
