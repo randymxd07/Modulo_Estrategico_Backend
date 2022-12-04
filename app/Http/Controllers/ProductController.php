@@ -20,8 +20,8 @@ class ProductController extends Controller
     {
         try {
 
-//            $products = Product::inRandomOrder()->get();
-            $products = Product::all();
+            $products = Product::inRandomOrder()->get();
+//            $products = Product::all();
 
             if($products->count() == 0)
                 return response()->json([

@@ -10,18 +10,8 @@ class Order extends Model
 {
     use HasFactory, SoftDeletes;
 
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
     protected $guarded = [];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
@@ -50,18 +40,4 @@ class Order extends Model
         return $this->belongsTo(PaymentMethod::class);
     }
 
-    public function orderType()
-    {
-        return $this->hasOne(OrderType::class);
-    }
-
-    public function paymentMethod()
-    {
-        return $this->hasOne(PaymentMethod::class);
-    }
-
-    public function ()
-    {
-        return $this->hasOne(::class);
-    }
 }
