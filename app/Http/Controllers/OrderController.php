@@ -25,7 +25,8 @@ class OrderController extends Controller
                     ->select(
                         'products.id as product_id',
                         'products.name as product_name',
-                        'order_vs_products.quantity'
+                        'order_vs_products.quantity',
+                        'products.price as product_price'
                     )
                     ->where('order_id', '=', $order->id)
                     ->get();
