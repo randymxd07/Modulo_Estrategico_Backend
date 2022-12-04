@@ -23,8 +23,8 @@ class CreateOrdersTable extends Migration
             $table->foreign('order_type_id')->references('id')->on('order_types')->cascadeOnDelete()->cascadeOnUpdate();
             $table->unsignedBigInteger('payment_method_id');
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->double('latitude');
-            $table->double('longitude');
+            $table->string('latitude', 100);
+            $table->string('longitude', 100);
             $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes()->nullable();

@@ -19,8 +19,8 @@ class OrderUpdateRequest extends FormRequest
         return [
             'order_type_id' => ['required', 'integer', 'exists:order_types,id'],
             'payment_method_id' => ['required', 'integer', 'exists:payment_methods,id'],
-            'latitude' => ['required', 'numeric'],
-            'longitude' => ['required', 'numeric'],
+            'latitude' => ['required', 'string'],
+            'longitude' => ['required', 'string'],
             'status' => ['boolean'],
             "order_details" => ['required', 'array'],
             "order_details.*.product_id" => ['required', 'integer', 'exists:products,id'],
