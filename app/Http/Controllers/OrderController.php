@@ -16,7 +16,7 @@ class OrderController extends Controller
 
         try {
 
-            $orders = Order::all();
+            $orders = DB::table('orders')->orderBy('created_at', 'desc')->get();
 
             foreach ($orders as $order){
 
@@ -43,6 +43,48 @@ class OrderController extends Controller
 
             return response()->json([
                 "data" => $orders,
+                "message" => "Ordenes encontradas correctamente"
+            ], 200);
+
+        } catch (\Exception $e){
+
+            throw new \Exception($e);
+
+        }
+
+    }
+
+    public function getLastFour(){
+
+        try {
+
+            $lastFourOrders = Order::latest()->take(4)->get();
+
+            foreach ($lastFourOrders as $order){
+
+                $orderDetails = OrderVsProduct::join('products', 'products.id', '=', 'order_vs_products.product_id')
+                    ->select(
+                        'products.id as product_id',
+                        'products.name as product_name',
+                        'order_vs_products.quantity',
+                        'products.price as product_price'
+                    )
+                    ->where('order_id', '=', $order->id)
+                    ->get();
+
+                $order->fullname = auth()->user()->fullname;
+                $order->order_details = $orderDetails;
+
+            }
+
+            if($lastFourOrders->count() == 0)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No hay ordenes en la base de datos"
+                ], 404);
+
+            return response()->json([
+                "data" => $lastFourOrders,
                 "message" => "Ordenes encontradas correctamente"
             ], 200);
 

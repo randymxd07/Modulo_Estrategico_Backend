@@ -13,6 +13,7 @@ Route::group([
         'prefix' => 'orders',
     ], function () {
         Route::get('/', [OrderController::class, 'index']);
+        Route::get('/getLastFour', [OrderController::class, 'getLastFour']);
         Route::post('/', [OrderController::class, 'store']);
         Route::get('/{id}', [OrderController::class, 'show']);
         Route::put('/{id}', [OrderController::class, 'update']);
