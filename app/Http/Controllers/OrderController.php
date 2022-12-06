@@ -163,7 +163,8 @@ class OrderController extends Controller
                     'products.id as product_id',
                     'products.name as product_name',
                     'order_vs_products.quantity',
-                    'products.price as product_price'
+                    'products.price as product_price',
+                    'products.estimated_time'
                 )
                 ->where('order_id', '=', $order->id)
                 ->get();
