@@ -16,6 +16,12 @@ use MongoDB\Driver\Exception\Exception;
 class ProductController extends Controller
 {
 
+    public function recomendedProducts(){
+
+        return "Productos recomendados";
+
+    }
+
     public function index()
     {
         try {
