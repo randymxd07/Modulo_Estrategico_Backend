@@ -16,7 +16,7 @@ class OrderController extends Controller
 
         try {
 
-            $orders = DB::table('orders')->orderBy('created_at', 'desc')->get();
+            $orders = DB::table('orders')->orderBy('id', 'desc')->get();
 
             foreach ($orders as $order){
 
