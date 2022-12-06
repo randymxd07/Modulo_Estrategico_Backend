@@ -25,7 +25,8 @@ class OrderController extends Controller
                         'products.id as product_id',
                         'products.name as product_name',
                         'order_vs_products.quantity',
-                        'products.price as product_price'
+                        'products.price as product_price',
+                        'products.estimated_time'
                     )
                     ->where('order_id', '=', $order->id)
                     ->get();
@@ -58,7 +59,7 @@ class OrderController extends Controller
 
         try {
 
-            $lastFourOrders = Order::latest()->take(4)->get();
+            $lastFourOrders = DB::table('orders')->orderBy('id', 'desc')->take(4)->get();
 
             foreach ($lastFourOrders as $order){
 
@@ -67,7 +68,8 @@ class OrderController extends Controller
                         'products.id as product_id',
                         'products.name as product_name',
                         'order_vs_products.quantity',
-                        'products.price as product_price'
+                        'products.price as product_price',
+                        'products.estimated_time'
                     )
                     ->where('order_id', '=', $order->id)
                     ->get();
