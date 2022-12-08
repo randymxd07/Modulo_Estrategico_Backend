@@ -5,39 +5,51 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Order Mail</title>
 </head>
 <body>
 
-    <h3>Tu pedido ha sido enviado!!!</h3>
+    <section class="container col-sm-7 p-5">
+        <h3>Tu pedido ha sido enviado!!!</h3>
 
-    <h3>Muchas gracias, {{$sendOrder['fullname']}}</h3>
+        <p class="lead">Muchas gracias, {{$sendOrder['fullname']}}</p>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-end">Precio</th>
+                    <th class="text-end">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach($sendOrder['order_details'] as $order)
-                    <td>{{$order['product_name']}}</td>
-                    <td>{{$order['quantity']}}</td>
-                    <td>{{$order['product_price']}}</td>
-                    <td>{{$order['quantity'] * (int)$order['product_price']}}</td>
+                    <tr>
+                        <td>{{$order['product_name']}}</td>
+                        <td class="text-center">{{$order['quantity']}}</td>
+                        <td class="text-end">{{$order['product_price']}}</td>
+                        <td class="text-end">{{$order['quantity'] * (int)$order['product_price']}}.00</td>
+                    </tr>
                 @endforeach
-            </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    <h3>Muchas gracias por confiar en Daraguma Restaurant</h3   >
+        <h3>Muchas gracias por confiar en Daraguma Restaurant</h3>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <style>
+        table {
+            width: 100%;
+            border: 1px solid #000;
+        }
+        th, td {
+            width: 25%;
+            text-align: left;
+            vertical-align: top;
+            border: 1px solid #000;
+        }
+    </style>
+
 </body>
 </html>
