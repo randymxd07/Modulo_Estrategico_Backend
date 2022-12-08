@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -21,7 +20,6 @@ Route::post('login', [UserController::class, 'authenticate']);
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('verify',[UserController::class, 'getAuthenticatedUser']);
 });
-
 
 require __DIR__.'/../routes/resources/ProductCategoryResource.php';
 

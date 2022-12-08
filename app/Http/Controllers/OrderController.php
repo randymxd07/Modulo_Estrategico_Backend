@@ -7,6 +7,7 @@ use App\Http\Requests\OrderUpdateRequest;
 use App\Models\Order;
 use App\Models\OrderVsProduct;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -135,6 +136,28 @@ class OrderController extends Controller
                 ], 400);
 
             DB::commit();
+
+            $sendOrder = Order::findOrFail($order['id']);
+
+            $orderDetails = OrderVsProduct::join('products', 'products.id', '=', 'order_vs_products.product_id')
+                ->select(
+                    'products.id as product_id',
+                    'products.name as product_name',
+                    'order_vs_products.quantity',
+                    'products.price as product_price',
+                    'products.estimated_time'
+                )
+                ->where('order_id', '=', $order['id'])
+                ->get();
+
+            $sendOrder->fullname = auth()->user()->fullname;
+            $sendOrder->order_details = $orderDetails;
+
+            Mail::send('emails.OrderEmail', compact(["sendOrder"]),
+            function($message){
+                $message->to('randym0624@gmail.com')
+                ->subject('Tu pedido ha sido enviado');
+            });
 
             return response()->json([
                 "data" => $order,
