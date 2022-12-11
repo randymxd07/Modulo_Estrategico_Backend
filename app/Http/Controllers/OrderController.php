@@ -8,16 +8,28 @@ use App\Models\Order;
 use App\Models\OrderVsProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
 
         try {
 
-            $orders = DB::table('orders')->orderBy('id', 'desc')->get();
+            if($request->query('limit') || $request->query('offset')){
+
+                $orders = DB::table('orders')->orderBy('id', 'desc')
+                    ->offset($request->query('offset'))
+                    ->limit($request->query('limit'))
+                    ->get();
+
+            } else {
+
+                $orders = DB::table('orders')->orderBy('id', 'desc')->get();
+
+            }
 
             foreach ($orders as $order){
 
