@@ -10,7 +10,7 @@
 <body>
 
     <section class="container col-sm-7 p-5">
-        <h3>Tu orden ha sido enviada, {{$sendOrder['fullname']}}</h3>
+        <h3>Tu orden está siendo preparada, {{$sendOrder['fullname']}}</h3>
 
         <table class="table table-striped table-hover">
             <thead>
@@ -32,6 +32,8 @@
                 @endforeach
             </tbody>
         </table>
+
+        <p>Espera unos minutos hasta que tu pedido este listo</p>
 
         <h3>Muchas gracias por confiar en Daraguma Restaurant</h3>
 

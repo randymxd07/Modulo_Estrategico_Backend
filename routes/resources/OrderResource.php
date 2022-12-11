@@ -15,6 +15,8 @@ Route::group([
         Route::get('/', [OrderController::class, 'index']);
         Route::get('/getLastFour', [OrderController::class, 'getLastFour']);
         Route::post('/', [OrderController::class, 'store']);
+        Route::post('/sendOrderInPreparationEmail/{id}', [OrderController::class, 'sendOrderInPreparationEmail']);
+        Route::post('/sendOrderFinishedEmail/{id}', [OrderController::class, 'sendOrderFinishedEmail']);
         Route::get('/{id}', [OrderController::class, 'show']);
         Route::put('/{id}', [OrderController::class, 'update']);
         Route::delete('/{id}', [OrderController::class, 'destroy']);

@@ -10,7 +10,7 @@
 <body>
 
     <section class="container col-sm-7 p-5">
-        <h3>Tu orden ha sido enviada, {{$sendOrder['fullname']}}</h3>
+        <h3>Tu orden está lista, {{$sendOrder['fullname']}}</h3>
 
         <table class="table table-striped table-hover">
             <thead>
@@ -33,7 +33,7 @@
             </tbody>
         </table>
 
-        <h3>Muchas gracias por confiar en Daraguma Restaurant</h3>
+        <h3>Muchas gracias por preferirnos 🙏</h3>
 
     </section>
 

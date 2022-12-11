@@ -168,7 +168,7 @@ class OrderController extends Controller
             Mail::send('emails.OrderEmail', compact(["sendOrder"]),
             function($message){
                 $message->to('randym0624@gmail.com')
-                ->subject('Tu pedido ha sido enviado');
+                ->subject('Tu orden ha sido enviada!!!');
             });
 
             return response()->json([
@@ -183,6 +183,68 @@ class OrderController extends Controller
             throw new \Exception($e);
 
         }
+
+    }
+
+    public function  sendOrderInPreparationEmail($id){
+
+        $sendOrder = Order::findOrFail($id);
+
+        $orderDetails = OrderVsProduct::join('products', 'products.id', '=', 'order_vs_products.product_id')
+            ->select(
+                'products.id as product_id',
+                'products.name as product_name',
+                'order_vs_products.quantity',
+                'products.price as product_price',
+                'products.estimated_time'
+            )
+            ->where('order_id', '=', $id)
+            ->get();
+
+        $sendOrder->fullname = auth()->user()->fullname;
+        $sendOrder->order_details = $orderDetails;
+
+        Mail::send('emails.InPreparationOrderEmail', compact(["sendOrder"]),
+        function($message){
+            $message->to('randym0624@gmail.com')
+                ->subject('Tu orden esta siendo preparada!!!');
+        });
+
+        return response()->json([
+            "data" => $orderDetails,
+            "message" => "Tu orden esta siendo preparada"
+        ], 201);
+
+    }
+
+    public function  sendOrderFinishedEmail($id){
+
+        $sendOrder = Order::findOrFail($id);
+
+        $orderDetails = OrderVsProduct::join('products', 'products.id', '=', 'order_vs_products.product_id')
+            ->select(
+                'products.id as product_id',
+                'products.name as product_name',
+                'order_vs_products.quantity',
+                'products.price as product_price',
+                'products.estimated_time'
+            )
+            ->where('order_id', '=', $id)
+            ->get();
+
+        $sendOrder->fullname = auth()->user()->fullname;
+        $sendOrder->order_details = $orderDetails;
+
+        Mail::send('emails.FinishedOrderEmail', compact(["sendOrder"]),
+        function($message){
+            $message->to('randym0624@gmail.com')
+                ->subject('Tu orden esta lista!!!');
+        });
+
+        return response()->json([
+            "data" => $orderDetails,
+            "message" => "Tu orden esta lista"
+        ], 201);
 
     }
 
