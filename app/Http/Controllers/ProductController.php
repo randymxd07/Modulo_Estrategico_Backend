@@ -32,7 +32,11 @@ class ProductController extends Controller
         $numberProductsByCategories = DB::table('order_vs_products')
             ->join('products', 'products.id', '=', 'order_vs_products.product_id')
             ->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
-            ->select(DB::raw('product_categories.id as product_category_id, product_categories.name, count(product_categories.name) as quantity'))
+            ->select(DB::raw('
+                product_categories.id as product_category_id,
+                product_categories.name,
+                count(product_categories.name) as quantity
+            '))
             ->orderBy('quantity', 'desc')
             ->groupBy('product_categories.name', 'product_categories.id')
             ->take(4)
@@ -44,6 +48,7 @@ class ProductController extends Controller
 
             $item = DB::table('products')
                 ->where('products.product_category_id', '=', $numberProductsByCategory->product_category_id)
+                ->orWhere('products.score', '>', 3)
                 ->inRandomOrder()
                 ->take(2)
                 ->get();
