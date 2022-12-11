@@ -47,8 +47,8 @@ class ProductController extends Controller
         foreach ($numberProductsByCategories as $numberProductsByCategory){
 
             $item = DB::table('products')
-                ->where('products.product_category_id', '=', $numberProductsByCategory->product_category_id)
-                ->where('products.score', '>=', 3)
+                ->where('product_category_id', '=', $numberProductsByCategory->product_category_id)
+                ->where('score', '>', 2)
                 ->inRandomOrder()
                 ->take(2)
                 ->get();
