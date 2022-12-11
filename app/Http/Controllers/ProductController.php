@@ -48,16 +48,19 @@ class ProductController extends Controller
 
             $item = DB::table('products')
                 ->where('products.product_category_id', '=', $numberProductsByCategory->product_category_id)
-                ->orWhere('products.score', '>=', 3)
+                ->where('products.score', '>=', 3)
                 ->inRandomOrder()
                 ->take(2)
                 ->get();
 
-            array_push($products, $item);
+            array_push($products, ...$item);
 
         }
 
-        return $products;
+        return response()->json([
+            "data" => $products,
+            "mesagge" => "Productos recomendados encontrados correctamente"
+        ], 200);;
 
     }
 
