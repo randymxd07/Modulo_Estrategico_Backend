@@ -18,7 +18,41 @@ class ProductController extends Controller
 
     public function recomendedProducts(){
 
-        return "Productos recomendados";
+//        $numberProductsByCategories = DB::table('order_vs_products')
+//            ->join('products', 'products.id', '=', 'order_vs_products.product_id')
+//            ->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
+//            ->select(
+//                'order_vs_products.id as order_id',
+//                'order_vs_products.product_id',
+//                'products.name as product_name',
+//                'product_categories.name as product_category_name'
+//            )
+//            ->get();
+
+        $numberProductsByCategories = DB::table('order_vs_products')
+            ->join('products', 'products.id', '=', 'order_vs_products.product_id')
+            ->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
+            ->select(DB::raw('product_categories.id as product_category_id, product_categories.name, count(product_categories.name) as quantity'))
+            ->orderBy('quantity', 'desc')
+            ->groupBy('product_categories.name', 'product_categories.id')
+            ->take(4)
+            ->get();
+
+        $products = [];
+
+        foreach ($numberProductsByCategories as $numberProductsByCategory){
+
+            $item = DB::table('products')
+                ->where('products.product_category_id', '=', $numberProductsByCategory->product_category_id)
+                ->inRandomOrder()
+                ->take(2)
+                ->get();
+
+            array_push($products, $item);
+
+        }
+
+        return $products;
 
     }
 
