@@ -48,7 +48,7 @@ class ProductController extends Controller
 
             $item = DB::table('products')
                 ->where('products.product_category_id', '=', $numberProductsByCategory->product_category_id)
-                ->orWhere('products.score', '>', 3)
+                ->orWhere('products.score', '>=', 3)
                 ->inRandomOrder()
                 ->take(2)
                 ->get();
