@@ -1,58 +1,18 @@
 models:
-  OrderType:
+  Coupon:
     id: id
     description: string:100 unique
-    status: boolean default:true
+    porcent: decimal
+    product_category_id: id foreign:product_categories.id
+    status: boolean default:false
     timestamps
     softDeletes
     relationships:
-      belongsTo: Order
-
-  PaymentMethod:
-    id: id
-    description: string:100 unique
-    status: boolean default:true
-    timestamps
-    softDeletes
-    relationships:
-      belongsTo: Order
-
-  Order:
-    id: id
-    user_id: id foreign:users.id
-    order_type_id: id foreign:order_types.id
-    payment_method_id: id foreign:payment_methods.id
-    latitude: integer
-    longitude: integer
-    status: boolean default:true
-    timestamps
-    softDeletes
-    relationships:
-      belongsTo: OrderVsProduct
-      hasOne: OrderType, PaymentMethod,
-
-  OrderVsProduct:
-    id: id
-    order_id: id foreign:orders.id
-    product_id: id foreign:products.id
-    quantity: integer
-    timestamps
-    softDeletes
-    relationships:
-      hasMany: Order, Product
+      hasMany: ProductCategory
 
 controllers:
-  OrderType:
-    resource
-  PaymentMethod:
-    resource
-  Order:
-    resource
-  OrderVsProduct:
+  Coupon:
     resource
 
 seeders:
-  OrderType,
-  PaymentMethod,
-  Order,
-  OrderVsProduct
+  Coupon

@@ -1,52 +1,16 @@
 created:
-    - app/Http/Controllers/OrderTypeController.php
-    - app/Http/Controllers/PaymentMethodController.php
-    - app/Http/Controllers/OrderController.php
-    - app/Http/Controllers/OrderVsProductController.php
-    - database/factories/OrderTypeFactory.php
-    - database/factories/PaymentMethodFactory.php
-    - database/factories/OrderFactory.php
-    - database/factories/OrderVsProductFactory.php
-    - database/migrations/2022_12_03_010009_create_order_types_table.php
-    - database/migrations/2022_12_03_010010_create_payment_methods_table.php
-    - database/migrations/2022_12_03_010011_create_orders_table.php
-    - database/migrations/2022_12_03_010012_create_order_vs_products_table.php
-    - app/Models/OrderType.php
-    - app/Models/PaymentMethod.php
-    - app/Models/Order.php
-    - app/Models/OrderVsProduct.php
-    - database/seeders/OrderTypeSeeder.php
-    - database/seeders/PaymentMethodSeeder.php
-    - database/seeders/OrderSeeder.php
-    - database/seeders/OrderVsProductSeeder.php
-    - tests/Feature/Http/Controllers/OrderTypeControllerTest.php
-    - tests/Feature/Http/Controllers/PaymentMethodControllerTest.php
-    - tests/Feature/Http/Controllers/OrderControllerTest.php
-    - tests/Feature/Http/Controllers/OrderVsProductControllerTest.php
-    - app/Http/Requests/OrderTypeStoreRequest.php
-    - app/Http/Requests/OrderTypeUpdateRequest.php
-    - app/Http/Requests/PaymentMethodStoreRequest.php
-    - app/Http/Requests/PaymentMethodUpdateRequest.php
-    - app/Http/Requests/OrderStoreRequest.php
-    - app/Http/Requests/OrderUpdateRequest.php
-    - app/Http/Requests/OrderVsProductStoreRequest.php
-    - app/Http/Requests/OrderVsProductUpdateRequest.php
-    - resources/views/orderType/index.blade.php
-    - resources/views/orderType/create.blade.php
-    - resources/views/orderType/show.blade.php
-    - resources/views/orderType/edit.blade.php
-    - resources/views/paymentMethod/index.blade.php
-    - resources/views/paymentMethod/create.blade.php
-    - resources/views/paymentMethod/show.blade.php
-    - resources/views/paymentMethod/edit.blade.php
-    - resources/views/order/index.blade.php
-    - resources/views/order/create.blade.php
-    - resources/views/order/show.blade.php
-    - resources/views/order/edit.blade.php
-    - resources/views/orderVsProduct/index.blade.php
-    - resources/views/orderVsProduct/create.blade.php
-    - resources/views/orderVsProduct/show.blade.php
-    - resources/views/orderVsProduct/edit.blade.php
+    - app/Http/Controllers/CouponController.php
+    - database/factories/CouponFactory.php
+    - database/migrations/2022_12_13_092239_create_coupons_table.php
+    - app/Models/Coupon.php
+    - database/seeders/CouponSeeder.php
+    - tests/Feature/Http/Controllers/CouponControllerTest.php
+    - app/Http/Requests/CouponStoreRequest.php
+    - app/Http/Requests/CouponUpdateRequest.php
+    - resources/views/coupon/index.blade.php
+    - resources/views/coupon/create.blade.php
+    - resources/views/coupon/show.blade.php
+    - resources/views/coupon/edit.blade.php
 updated:
     - routes/api.php
 models:
@@ -57,3 +21,4 @@ models:
     PaymentMethod: { id: id, description: 'string:100 unique', status: 'boolean default:true', timestamps: timestamps, softdeletes: softDeletes, relationships: { belongsTo: Order } }
     Order: { id: id, user_id: 'id foreign:users.id', order_type_id: 'id foreign:order_types.id', payment_method_id: 'id foreign:payment_methods.id', latitude: integer, longitude: integer, status: 'boolean default:true', timestamps: timestamps, softdeletes: softDeletes, relationships: { belongsTo: OrderVsProduct, hasOne: 'OrderType, PaymentMethod,' } }
     OrderVsProduct: { id: id, order_id: 'id foreign:orders.id', product_id: 'id foreign:products.id', quantity: integer, timestamps: timestamps, softdeletes: softDeletes, relationships: { hasMany: 'Order, Product' } }
+    Coupon: { id: id, description: 'string:100 unique', porcent: decimal, product_category_id: 'id foreign:product_categories.id', status: 'boolean default:false', timestamps: timestamps, softdeletes: softDeletes, relationships: { hasMany: ProductCategory } }

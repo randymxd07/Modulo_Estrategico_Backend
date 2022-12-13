@@ -13,6 +13,7 @@ class ProductCategoryController extends Controller
 
     public function index(Request $request)
     {
+
         try {
 
             $productCategories = ProductCategory::all();

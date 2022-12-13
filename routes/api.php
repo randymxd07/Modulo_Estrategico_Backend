@@ -30,3 +30,6 @@ require __DIR__.'/../routes/resources/OrderTypeResource.php';
 require __DIR__.'/../routes/resources/PaymentMethodResource.php';
 
 require __DIR__.'/../routes/resources/OrderResource.php';
+
+require __DIR__.'/../routes/resources/CouponResource.php';
+
