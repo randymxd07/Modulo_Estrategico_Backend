@@ -17,10 +17,11 @@ class CouponUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => ['required', 'string', 'max:100'],
-            'percent' => ['required', 'numeric'],
-            'product_category_id' => ['required', 'integer', 'exists:product_categories,id'],
-            'number_of_days' => ['required', 'integer'],
+//            'description' => ['required', 'string', 'max:100'],
+//            'percent' => ['required', 'numeric'],
+//            'product_category_id' => ['required', 'integer', 'exists:product_categories,id'],
+//            'number_of_days' => ['required', 'integer'],
+            'status' => ['boolean']
         ];
     }
 

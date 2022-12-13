@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CouponStoreRequest;
 use App\Http\Requests\CouponUpdateRequest;
 use App\Models\Coupon;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -135,7 +136,48 @@ class CouponController extends Controller
 
             DB::beginTransaction();
 
-            $coupon = Coupon::where('id', '=', $id)->update($request->all());
+            if($request['status'] == false){
+
+                $coupon = Coupon::where('id', '=', $id)->update($request->all());
+
+                $category = Coupon::findOrFail($id)->product_category_id;
+
+                $product_categories = DB::table('product_categories')
+                    ->join('products', 'products.product_category_id', '=', 'product_categories.id')
+                    ->select('products.id as product_id', 'products.name as product_name', 'products.discount')
+                    ->where('product_categories.id', '=', $category)
+                    ->get();
+
+                foreach ($product_categories as $productCategory) {
+
+                    Product::where('id', '=', $productCategory->product_id)->update([
+                        "discount" => null
+                    ]);
+
+                }
+
+            } else {
+
+                $coupon = Coupon::where('id', '=', $id)->update($request->all());
+
+                $discount = Coupon::findOrFail($id)->percent;
+                $category = Coupon::findOrFail($id)->product_category_id;
+
+                $product_categories = DB::table('product_categories')
+                    ->join('products', 'products.product_category_id', '=', 'product_categories.id')
+                    ->select('products.id as product_id', 'products.name as product_name', 'products.discount')
+                    ->where('product_categories.id', '=', $category)
+                    ->get();
+
+                foreach ($product_categories as $productCategory) {
+
+                    Product::where('id', '=', $productCategory->product_id)->update([
+                        "discount" => $discount
+                    ]);
+
+                }
+
+            }
 
             if(!$coupon)
                 return response()->json([
