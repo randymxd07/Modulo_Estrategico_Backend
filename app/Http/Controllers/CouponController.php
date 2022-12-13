@@ -18,11 +18,11 @@ class CouponController extends Controller
 
             $coupons = Coupon::where('status', '=', false)->get();
 
-            if($coupons->count() == 0)
-                return response()->json([
-                    "data" => null,
-                    "message" => "No hay cupones en la base de datos"
-                ], 404);
+//            if($coupons->count() == 0)
+//                return response()->json([
+//                    "data" => null,
+//                    "message" => "No hay inactivos cupones en la base de datos"
+//                ], 404);
 
             return response()->json([
                 "data" => $coupons,
@@ -44,11 +44,11 @@ class CouponController extends Controller
 
             $coupons = Coupon::where('status', '=', true)->get();
 
-            if($coupons->count() == 0)
-                return response()->json([
-                    "data" => null,
-                    "message" => "No hay cupones en la base de datos"
-                ], 404);
+//            if($coupons->count() == 0)
+//                return response()->json([
+//                    "data" => null,
+//                    "message" => "No hay activos cupones en la base de datos"
+//                ], 404);
 
             return response()->json([
                 "data" => $coupons,
