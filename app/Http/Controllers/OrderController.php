@@ -39,7 +39,8 @@ class OrderController extends Controller
                         'products.name as product_name',
                         'order_vs_products.quantity',
                         'products.price as product_price',
-                        'products.estimated_time'
+                        'products.estimated_time',
+                        'order_vs_products.discount'
                     )
                     ->where('order_id', '=', $order->id)
                     ->get();
@@ -134,7 +135,8 @@ class OrderController extends Controller
                 $orderDetails = [
                     "order_id" => $order->id,
                     "product_id" => $order_detail['product_id'],
-                    "quantity" => $order_detail['quantity']
+                    "quantity" => $order_detail['quantity'],
+                    "discount" => $order_detail['discount'],
                 ];
 
                 OrderVsProduct::create($orderDetails);
@@ -261,7 +263,8 @@ class OrderController extends Controller
                     'products.name as product_name',
                     'order_vs_products.quantity',
                     'products.price as product_price',
-                    'products.estimated_time'
+                    'products.estimated_time',
+                    'order_vs_products.discount'
                 )
                 ->where('order_id', '=', $order->id)
                 ->get();
