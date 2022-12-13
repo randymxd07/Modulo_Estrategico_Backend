@@ -6,16 +6,43 @@ use App\Http\Requests\CouponStoreRequest;
 use App\Http\Requests\CouponUpdateRequest;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CouponController extends Controller
 {
 
-    public function index()
+    public function getInactiveCoupons()
     {
 
         try {
 
-            $coupons = Coupon::all();
+            $coupons = Coupon::where('status', '=', false)->get();
+
+            if($coupons->count() == 0)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No hay cupones en la base de datos"
+                ], 404);
+
+            return response()->json([
+                "data" => $coupons,
+                "message" => "Cupones encontrados correctamente"
+            ], 200);
+
+        } catch (\Exception $e){
+
+            throw new \Exception($e);
+
+        }
+
+    }
+
+    public function getActiveCoupons()
+    {
+
+        try {
+
+            $coupons = Coupon::where('status', '=', true)->get();
 
             if($coupons->count() == 0)
                 return response()->json([
@@ -38,32 +65,108 @@ class CouponController extends Controller
 
     public function store(CouponStoreRequest $request)
     {
-        $coupon = Coupon::create($request->validated());
 
-        $request->session()->flash('coupon.id', $coupon->id);
+        try {
 
-        return redirect()->route('coupon.index');
+            DB::beginTransaction();
+
+            $coupon = Coupon::create($request->validated());
+
+            if(!$coupon)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No se pudo crear el cupon"
+                ], 400);
+
+            DB::commit();
+
+            return response()->json([
+                "data" => $coupon,
+                "message" => "Cupon creado correctamente"
+            ], 201);
+
+        } catch (\Exception $e){
+
+            DB::rollBack();
+
+            throw new \Exception($e);
+
+        }
+
     }
 
-    public function show(Request $request, Coupon $coupon)
+    public function show($id)
     {
-        return view('coupon.show', compact('coupon'));
+        try {
+
+            $coupon = Coupon::findOrFail($id);
+
+            if(!$coupon)
+                return response()->json([
+                    "data" => null,
+                    "message" => `El cupon con el id: ${$id} no pudo ser encontrado`
+                ], 404);
+
+            return response()->json([
+                "data" => $coupon,
+                "message" => "Cupon encontrado correctamente"
+            ], 200);
+
+        } catch (\Exception $e){
+
+            throw new \Exception($e);
+
+        }
     }
 
-    public function update(CouponUpdateRequest $request, Coupon $coupon)
+    public function update($id, CouponUpdateRequest $request)
     {
-        $coupon->update($request->validated());
+        try {
 
-        $request->session()->flash('coupon.id', $coupon->id);
+            DB::beginTransaction();
 
-        return redirect()->route('coupon.index');
+            $coupon = Coupon::where('id', '=', $id)->update($request->all());
+
+            if(!$coupon)
+                return response()->json([
+                    "data" => null,
+                    "message" => "No se pude actualizar el cupon"
+                ], 400);
+
+            DB::commit();
+
+            return response()->json([
+                "data" => $request->all(),
+                "message" => "Cupon actualizado correctamente"
+            ], 200);
+
+        } catch (Exception $e){
+
+            DB::rollBack();
+
+            throw new \Exception($e);
+
+        }
     }
 
-    public function destroy(Request $request, Coupon $coupon)
+    public function destroy($id)
     {
-        $coupon->delete();
+        try {
 
-        return redirect()->route('coupon.index');
+            $coupon = Coupon::findOrFail($id);
+
+            $coupon->delete();
+
+            return response()->json([
+                "data" => $coupon,
+                "message" => 'El cupon fue eliminado correctamente'
+            ], 200);
+
+        } catch (\Exception $e){
+
+            throw new \Exception($e);
+
+        }
     }
 
 }

@@ -12,7 +12,8 @@ Route::group([
     Route::group([
         'prefix' => 'coupons',
     ], function () {
-        Route::get('/', [CouponController::class, 'index']);
+        Route::get('/getInactiveCoupons', [CouponController::class, 'getInactiveCoupons']);
+        Route::get('/getActiveCoupons', [CouponController::class, 'getActiveCoupons']);
         Route::post('/', [CouponController::class, 'store']);
         Route::get('/{id}', [CouponController::class, 'show']);
         Route::put('/{id}', [CouponController::class, 'update']);

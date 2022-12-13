@@ -2,33 +2,31 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CouponStoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            'description' => ['required', 'string', 'max:100', 'unique:coupons,description'],
-            'porcent' => ['required', 'numeric'],
+            'description' => ['required', 'string', 'max:100'],
+            'percent' => ['required', 'numeric'],
             'product_category_id' => ['required', 'integer', 'exists:product_categories,id'],
-            'status' => ['required'],
-            'softdeletes' => ['required'],
+            'number_of_days' => ['required', 'integer'],
+            'status' => ['boolean'],
         ];
     }
+
+    protected function failedValidation(Validator $validator) {
+        throw new HttpResponseException(response()->json($validator->errors()->all(), 422));
+    }
+
 }

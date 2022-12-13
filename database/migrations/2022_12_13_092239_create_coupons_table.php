@@ -15,7 +15,9 @@ class CreateCouponsTable extends Migration
             $table->bigIncrements('id');
             $table->string('description', 100);
             $table->decimal('percent');
+            $table->unsignedBigInteger('number_of_days');
             $table->foreignId('product_category_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('color')->nullable();
             $table->boolean('status')->default(false);
             $table->timestamps();
             $table->softDeletes()->nullable();
