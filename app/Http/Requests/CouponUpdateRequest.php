@@ -21,7 +21,6 @@ class CouponUpdateRequest extends FormRequest
             'percent' => ['required', 'numeric'],
             'product_category_id' => ['required', 'integer', 'exists:product_categories,id'],
             'number_of_days' => ['required', 'integer'],
-            'status' => ['boolean'],
         ];
     }
 

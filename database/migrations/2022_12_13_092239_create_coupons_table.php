@@ -13,6 +13,7 @@ class CreateCouponsTable extends Migration
 
         Schema::create('coupons', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('coupon_id')->unique();
             $table->string('description', 100);
             $table->decimal('percent');
             $table->unsignedBigInteger('number_of_days');

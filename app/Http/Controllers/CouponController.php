@@ -70,7 +70,17 @@ class CouponController extends Controller
 
             DB::beginTransaction();
 
-            $coupon = Coupon::create($request->validated());
+            $object = [
+                "coupon_id" => strtoupper(uuid_create()),
+                "description" => $request['description'],
+                "percent" => $request['percent'],
+                "product_category_id" => $request['product_category_id'],
+                "number_of_days" => $request['number_of_days'],
+                "color" => $request['color'],
+                "status" => false
+            ];
+
+            $coupon = Coupon::create($object);
 
             if(!$coupon)
                 return response()->json([
