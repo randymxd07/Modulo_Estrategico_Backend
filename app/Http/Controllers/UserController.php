@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
+use App\Models\ProductCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -78,7 +81,32 @@ class UserController extends Controller
 
         $token = JWTAuth::fromUser($user);
 
+        $random_product_category_id = rand(1, 15);
+
+        $product_category = ProductCategory::findOrFail($random_product_category_id)->name;
+
+        $couponData = [
+            "coupon_id" => strtoupper(uuid_create()),
+            "description" => "Cupon de bienvenida para comprar ".strtolower($product_category),
+            "percent" => 30,
+            "product_category_id" => $random_product_category_id,
+            "number_of_days" => 3,
+            "color" => "warning",
+            "status" => false,
+            "show_coupon" => false,
+        ];
+
+        Coupon::create($couponData);
+
+        Mail::send('emails.SendCouponByRegisterEmail', compact(["couponData"]),
+        function($message){
+            $message->to('randym0624@gmail.com')
+            ->subject('Aquí te va un regalo!!!');
+        });
+
         return response()->json(compact('user','token'),201);
+
     }
+
 }
 
