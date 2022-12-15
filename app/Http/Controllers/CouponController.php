@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ActivateCouponRequest;
 use App\Http\Requests\CouponStoreRequest;
 use App\Http\Requests\CouponUpdateRequest;
 use App\Models\Coupon;
@@ -57,6 +58,41 @@ class CouponController extends Controller
             ], 200);
 
         } catch (\Exception $e){
+
+            throw new \Exception($e);
+
+        }
+
+    }
+
+    public function activateCoupon(ActivateCouponRequest $request){
+
+        try {
+
+            DB::beginTransaction();
+
+            $coupon_id = $request->all();
+
+            $coupon = Coupon::where('coupon_id', '=', $coupon_id)->update([
+                "show_coupon" => true
+            ]);
+
+            if(!$coupon)
+                return response()->json([
+                    "data" => null,
+                    "message" => "El cupon no pudo ser agregado"
+                ], 400);
+
+            DB::commit();
+
+            return response()->json([
+                "data" => $request->all(),
+                "message" => "Cupon agregado correctamente"
+            ], 200);
+
+        } catch (\Exception $e){
+
+            DB::rollBack();
 
             throw new \Exception($e);
 
