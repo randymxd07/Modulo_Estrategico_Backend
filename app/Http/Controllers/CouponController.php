@@ -17,7 +17,7 @@ class CouponController extends Controller
 
         try {
 
-            $coupons = Coupon::where('status', '=', false)->get();
+            $coupons = Coupon::where('status', '=', false)->where('show_coupon', '=', true)->get();
 
 //            if($coupons->count() == 0)
 //                return response()->json([
@@ -43,7 +43,7 @@ class CouponController extends Controller
 
         try {
 
-            $coupons = Coupon::where('status', '=', true)->get();
+            $coupons = Coupon::where('status', '=', true)->where('show_coupon', '=', true)->get();
 
 //            if($coupons->count() == 0)
 //                return response()->json([
@@ -78,7 +78,8 @@ class CouponController extends Controller
                 "product_category_id" => $request['product_category_id'],
                 "number_of_days" => $request['number_of_days'],
                 "color" => $request['color'],
-                "status" => false
+                "status" => false,
+                "show_coupon" => true
             ];
 
             $coupon = Coupon::create($object);

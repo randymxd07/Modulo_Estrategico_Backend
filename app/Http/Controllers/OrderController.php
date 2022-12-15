@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Requests\OrderUpdateRequest;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderVsProduct;
+use App\Models\ProductCategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -172,6 +174,37 @@ class OrderController extends Controller
                 $message->to('randym0624@gmail.com')
                 ->subject('Tu orden ha sido enviada!!!');
             });
+
+            $numberOfOrders = Order::all()->count();
+
+            if($numberOfOrders%10 == 0){
+
+                $random_number_of_days = rand(1, 3);
+                $random_percent = rand(20, 40);
+                $random_product_category_id = rand(1, 15);
+
+                $product_category = ProductCategory::findOrFail($random_product_category_id)->name;
+
+                $couponData = [
+                    "coupon_id" => strtoupper(uuid_create()),
+                    "description" => "Cupon de descuento para comprar ".strtolower($product_category),
+                    "percent" => $random_percent,
+                    "product_category_id" => $random_product_category_id,
+                    "number_of_days" => $random_number_of_days,
+                    "color" => "warning",
+                    "status" => false,
+                    "show_coupon" => false,
+                ];
+
+                Coupon::create($couponData);
+
+                Mail::send('emails.SendCouponByQuantityOfPurchasesEmail', compact(["couponData"]),
+                function($message){
+                    $message->to('randym0624@gmail.com')
+                    ->subject('Aquí te va un regalo!!!');
+                });
+
+            }
 
             return response()->json([
                 "data" => $order,
