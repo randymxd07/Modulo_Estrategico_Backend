@@ -63,6 +63,12 @@ Si todo sale bien entonces podemos utilizar el comando para crear las tablas nec
 php artisan migrate
 ```
 
+## Agregar datos de prueba a la base de datos
+
+```
+php artisan db:seed
+```
+
 ## Levantar el servidor
 
 ```
@@ -82,5 +88,3 @@ php artisan optimize:clear
 ```
 composer clear cache
 ```
-
-
